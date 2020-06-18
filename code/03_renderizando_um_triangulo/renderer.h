@@ -20,6 +20,8 @@ private:
 
 private:
     void initPipeline();
+
+    static QByteArray readFile(const QString &fileName);
 };
 
 #endif // RENDERER_H
