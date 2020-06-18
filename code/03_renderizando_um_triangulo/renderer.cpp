@@ -9,6 +9,8 @@ Renderer::Renderer(VulkanWindow *window) : m_window(window) {
 void Renderer::initResources() {
     VkDevice device = m_window->device();
     m_deviceFunctions = m_window->vulkanInstance()->deviceFunctions(device);
+
+    initPipeline();
 }
 
 void Renderer::startNextFrame() {
@@ -16,4 +18,6 @@ void Renderer::startNextFrame() {
     m_window->requestUpdate();
 }
 
+void Renderer::initPipeline() {
 
+}

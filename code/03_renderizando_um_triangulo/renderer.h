@@ -17,6 +17,9 @@ private:
 
     VulkanWindow *m_window = nullptr;
     QVulkanDeviceFunctions *m_deviceFunctions;
+
+private:
+    void initPipeline();
 };
 
 #endif // RENDERER_H
