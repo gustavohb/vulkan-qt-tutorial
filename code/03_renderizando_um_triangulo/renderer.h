@@ -22,6 +22,7 @@ private:
     void initPipeline();
 
     static QByteArray readFile(const QString &fileName);
+    VkShaderModule createShaderModule(const QByteArray &code);
 };
 
 #endif // RENDERER_H
