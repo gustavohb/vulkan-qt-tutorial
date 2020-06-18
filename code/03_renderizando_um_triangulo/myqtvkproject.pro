@@ -42,3 +42,12 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+Shaders = shaders/shader.vert shaders/shader.frag
+for (shader, Shaders) {
+    exists($$_PRO_FILE_PWD_/$${shader}) {
+        message(Compiling Spir-V $$_PRO_FILE_PWD_/$${shader})
+        ERROR = $$system(glslangValidator -V -o $$_PRO_FILE_PWD_/$${shader}.spv $$_PRO_FILE_PWD_/$${shader})
+        message($$ERROR)
+    }
+}
