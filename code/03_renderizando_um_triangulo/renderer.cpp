@@ -95,6 +95,31 @@ void Renderer::initPipeline() {
     if (result != VK_SUCCESS)
         qFatal("Failed to create pipeline layout: %d", result);
 
+    VkGraphicsPipelineCreateInfo pipelineInfo = {};
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    pipelineInfo.stageCount = 2;
+    pipelineInfo.pStages = shaderStages;
+    pipelineInfo.pDynamicState = &dynamicInfo;
+    pipelineInfo.pVertexInputState = &vertexInputInfo;
+    pipelineInfo.pInputAssemblyState = &inputAssemblyInfo;
+    pipelineInfo.pRasterizationState = &rasterizationInfo;
+    pipelineInfo.pColorBlendState = &colorBlending;
+    pipelineInfo.layout = m_pipelineLayout;
+    pipelineInfo.renderPass = m_window->defaultRenderPass();
+    pipelineInfo.subpass = 0;
+
+    result = m_deviceFunctions->vkCreateGraphicsPipelines(
+            device,
+            VK_NULL_HANDLE,
+            1,
+            &pipelineInfo,
+            nullptr,
+            &m_graphicsPipeline
+        );
+
+    if (result != VK_SUCCESS)
+        qFatal("Failed to graphics pipeline: %d", result);
+
     m_deviceFunctions->vkDestroyShaderModule(device, fragShaderModule, nullptr);
     m_deviceFunctions->vkDestroyShaderModule(device, vertShaderModule, nullptr);
 }
@@ -127,5 +152,6 @@ VkShaderModule Renderer::createShaderModule(const QByteArray &code) {
 void Renderer::releaseResources() {
     VkDevice device = m_window->device();
 
+    m_deviceFunctions->vkDestroyPipeline(device, m_graphicsPipeline, nullptr);
     m_deviceFunctions->vkDestroyPipelineLayout(device, m_pipelineLayout, nullptr);
 }

@@ -18,6 +18,7 @@ private:
     VulkanWindow *m_window = nullptr;
     QVulkanDeviceFunctions *m_deviceFunctions;
     VkPipelineLayout m_pipelineLayout = nullptr;
+    VkPipeline m_graphicsPipeline = nullptr;
 
 private:
     void initPipeline();
