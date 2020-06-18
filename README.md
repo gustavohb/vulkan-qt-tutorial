@@ -27,7 +27,7 @@ Os arquivos contendo todo código do programa estão organizados na pasta `code`
      * [*Shaders*](https://gustavohb.github.io/vulkan-qt-tutorial-site/renderizando-um-triangulo/pipeline-grafico/shaders)
      * [Estágios de função fixa](https://gustavohb.github.io/vulkan-qt-tutorial-site/renderizando-um-triangulo/pipeline-grafico/estagios-de-funcao-fixa)
      * [Criação do *pipeline* gráfico](https://gustavohb.github.io/vulkan-qt-tutorial-site/renderizando-um-triangulo/pipeline-grafico/criacao-do-pipeline-grafico)
- * [Usando *buffer* de vértice](https://gustavohb.github.io/vulkan-qt-tutorial-site/usando-buffer-de-vertice)
+* [Usando *buffer* de vértice](https://gustavohb.github.io/vulkan-qt-tutorial-site/usando-buffer-de-vertice)
   * [Acessando o *buffer* de vértice no *vertex shader*](https://gustavohb.github.io/vulkan-qt-tutorial-site/usando-buffer-de-vertice/acessando-o-buffer-de-vertice-no-vertex-shader)
   * [Dados de vértice](https://gustavohb.github.io/vulkan-qt-tutorial-site/usando-buffer-de-vertice/dados-de-vertice)
   * [Abstraindo a criação de *buffer*](https://gustavohb.github.io/vulkan-qt-tutorial-site/usando-buffer-de-vertice/abstraindo-a-criacao-de-buffer)
