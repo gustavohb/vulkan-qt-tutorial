@@ -37,6 +37,27 @@ void Renderer::startNextFrame() {
     VkCommandBuffer commandBuffer = m_window->currentCommandBuffer();
     m_deviceFunctions->vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
+    VkViewport viewport;
+    viewport.x = 0;
+    viewport.y = 0;
+    viewport.width = swapChainImageSize.width();
+    viewport.height = swapChainImageSize.height();
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+    m_deviceFunctions->vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+
+    VkRect2D scissor;
+    scissor.offset.x = 0;
+    scissor.offset.y = 0;
+    scissor.extent.width = viewport.width;
+    scissor.extent.height = viewport.height;
+    m_deviceFunctions->vkCmdSetScissor(
+        commandBuffer,
+        0,
+        1,
+        &scissor
+    );
+
     m_window->frameReady();
     m_window->requestUpdate();
 }
