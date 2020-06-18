@@ -58,6 +58,15 @@ void Renderer::startNextFrame() {
         &scissor
     );
 
+    m_deviceFunctions->vkCmdBindPipeline(
+        commandBuffer,
+        VK_PIPELINE_BIND_POINT_GRAPHICS,
+        m_graphicsPipeline
+    );
+
+    m_deviceFunctions->vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+    m_deviceFunctions->vkCmdEndRenderPass(commandBuffer);
+
     m_window->frameReady();
     m_window->requestUpdate();
 }
