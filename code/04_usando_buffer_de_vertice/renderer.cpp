@@ -6,6 +6,11 @@
 
 #include "vulkanwindow.h"
 
+#include "model.h"
+
+Object3D::Object3D(QSharedPointer<Model> model)
+    : model(model) {}
+
 Renderer::Renderer(VulkanWindow *window) : m_window(window) {
 
 }
@@ -15,6 +20,12 @@ void Renderer::initResources() {
     m_deviceFunctions = m_window->vulkanInstance()->deviceFunctions(device);
 
     initPipeline();
+    initObject();
+}
+
+void Renderer::initObject() {
+    QSharedPointer<Model> model = QSharedPointer<Model>::create(Model());
+    m_object = new Object3D(model);
 }
 
 void Renderer::startNextFrame() {

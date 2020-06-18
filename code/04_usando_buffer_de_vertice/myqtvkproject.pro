@@ -33,7 +33,8 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     vulkanwindow.h \
-    renderer.h
+    renderer.h \
+    model.h
 
 FORMS += \
         mainwindow.ui
