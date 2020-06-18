@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "vulkanwindow.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -17,6 +19,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    VulkanWindow *m_vulkanWindow;
 };
 
 #endif // MAINWINDOW_H

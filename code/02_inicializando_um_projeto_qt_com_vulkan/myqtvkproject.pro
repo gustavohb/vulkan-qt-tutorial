@@ -26,10 +26,14 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    vulkanwindow.cpp \
+    renderer.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    vulkanwindow.h \
+    renderer.h
 
 FORMS += \
         mainwindow.ui
