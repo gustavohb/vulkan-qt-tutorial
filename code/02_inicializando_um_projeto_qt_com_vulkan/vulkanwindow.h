@@ -15,6 +15,9 @@ public:
 private:
     QVulkanInstance m_instance;
     Renderer *m_renderer = nullptr;
+
+private:
+    void pickPhysicalDevice();
 };
 
 #endif // VULKANWINDOW_H
