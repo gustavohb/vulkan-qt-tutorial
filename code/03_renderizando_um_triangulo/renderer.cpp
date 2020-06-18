@@ -65,6 +65,18 @@ void Renderer::initPipeline() {
     inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     inputAssemblyInfo.primitiveRestartEnable = VK_FALSE;
 
+    VkPipelineRasterizationStateCreateInfo rasterizationInfo = {};
+    rasterizationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+    rasterizationInfo.depthClampEnable = VK_FALSE;
+    rasterizationInfo.rasterizerDiscardEnable = VK_FALSE;
+    rasterizationInfo.polygonMode = VK_POLYGON_MODE_FILL;
+    rasterizationInfo.cullMode = VK_CULL_MODE_BACK_BIT;
+    rasterizationInfo.frontFace = VK_FRONT_FACE_CLOCKWISE;
+    rasterizationInfo.depthBiasEnable = VK_FALSE;
+    rasterizationInfo.depthBiasConstantFactor = 0.0f;
+    rasterizationInfo.depthBiasClamp = 0.0f;
+    rasterizationInfo.depthBiasSlopeFactor = 0.0f;
+    rasterizationInfo.lineWidth = 1.0f;
 
     m_deviceFunctions->vkDestroyShaderModule(device, fragShaderModule, nullptr);
     m_deviceFunctions->vkDestroyShaderModule(device, vertShaderModule, nullptr);
