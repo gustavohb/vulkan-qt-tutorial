@@ -51,3 +51,6 @@ for (shader, Shaders) {
         message($$ERROR)
     }
 }
+
+RESOURCES += \
+    resources.qrc
