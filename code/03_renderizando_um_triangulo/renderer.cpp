@@ -27,6 +27,9 @@ void Renderer::initPipeline() {
 
     VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
     VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
+
+    m_deviceFunctions->vkDestroyShaderModule(device, fragShaderModule, nullptr);
+    m_deviceFunctions->vkDestroyShaderModule(device, vertShaderModule, nullptr);
 }
 
 QByteArray Renderer::readFile(const QString &fileName) {
