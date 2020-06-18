@@ -11,12 +11,13 @@ public:
     Renderer(VulkanWindow *window);
 
     void initResources() override;
+    void releaseResources() override;
     void startNextFrame() override;
 
 private:
-
     VulkanWindow *m_window = nullptr;
     QVulkanDeviceFunctions *m_deviceFunctions;
+    VkPipelineLayout m_pipelineLayout = nullptr;
 
 private:
     void initPipeline();

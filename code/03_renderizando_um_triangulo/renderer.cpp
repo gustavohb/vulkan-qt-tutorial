@@ -88,6 +88,13 @@ void Renderer::initPipeline() {
     colorBlending.attachmentCount = 1;
     colorBlending.pAttachments = &colorBlendAttachment;
 
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
+    pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+
+    VkResult result = m_deviceFunctions->vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &m_pipelineLayout);
+    if (result != VK_SUCCESS)
+        qFatal("Failed to create pipeline layout: %d", result);
+
     m_deviceFunctions->vkDestroyShaderModule(device, fragShaderModule, nullptr);
     m_deviceFunctions->vkDestroyShaderModule(device, vertShaderModule, nullptr);
 }
@@ -115,4 +122,10 @@ VkShaderModule Renderer::createShaderModule(const QByteArray &code) {
         QDebug(QtFatalMsg) << QLatin1String("Failed to create shader module:") << result;
 
     return shaderModule;
+}
+
+void Renderer::releaseResources() {
+    VkDevice device = m_window->device();
+
+    m_deviceFunctions->vkDestroyPipelineLayout(device, m_pipelineLayout, nullptr);
 }
