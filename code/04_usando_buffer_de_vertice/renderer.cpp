@@ -55,7 +55,27 @@ void Renderer::createBuffer(VkDeviceSize size,
             &memRequirements
         );
 
+    VkMemoryAllocateInfo allocInfo = {};
+    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.allocationSize = memRequirements.size;
+    allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
 
+    result = m_deviceFunctions->vkAllocateMemory(
+            device,
+            &allocInfo,
+            nullptr,
+            &bufferMemory
+        );
+    if ( result != VK_SUCCESS) {
+        qFatal("Failed to allocate vertex buffer memory!");
+    }
+
+    m_deviceFunctions->vkBindBufferMemory(
+            device,
+            buffer,
+            bufferMemory,
+            0
+        );
 
 }
 
