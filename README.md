@@ -11,8 +11,8 @@ Os arquivos contendo todo código do programa estão organizados na pasta `code`
 * [Introdução](https://gustavohb.github.io/vulkan-qt-tutorial-site/)
 * [Vulkan e Qt](https://gustavohb.github.io/vulkan-qt-tutorial-site/vulkan-e-qt)
    * [Sobre Vulkan](https://gustavohb.github.io/vulkan-qt-tutorial-site/vulkan-e-qt/sobre-vulkan)
-   * [Comparação entre Vulkan e OpenGL](https://gustavohb.github.io/vulkan-qt-tutorial-site/vulkan-e-qt/sobre-vulkan/comparacao-entre-vulkan-e-opengl)
-   * [Objetos Vulkan](https://gustavohb.github.io/vulkan-qt-tutorial-site/vulkan-e-qt/sobre-vulkan/objetos-vulkan)
+     * [Comparação entre Vulkan e OpenGL](https://gustavohb.github.io/vulkan-qt-tutorial-site/vulkan-e-qt/sobre-vulkan/comparacao-entre-vulkan-e-opengl)
+     * [Objetos Vulkan](https://gustavohb.github.io/vulkan-qt-tutorial-site/vulkan-e-qt/sobre-vulkan/objetos-vulkan)
    * [Sobre Qt](https://gustavohb.github.io/vulkan-qt-tutorial-site/vulkan-e-qt/sobre-qt)
    * [Comparação do Qt com OpenGL e o Qt com o Vulkan](https://gustavohb.github.io/vulkan-qt-tutorial-site/vulkan-e-qt/comparacao-do-qt-com-opengl-e-o-qt-com-o-vulkan)
 * [Inicializando um projeto no Qt com Vulkan](https://gustavohb.github.io/vulkan-qt-tutorial-site/inicializando-um-projeto-qt-com-vulkan)
@@ -74,4 +74,4 @@ Os arquivos contendo todo código do programa estão organizados na pasta `code`
 
 ## Licença
 
-Consulte o arquivo [LICENSE](https://github.com/gustavohb/vulkan-qt-tutorial/blob/master/LICENSE) para obter os direitos e limitações da licença (MIT)
+Consulte o arquivo [LICENÇA](https://github.com/gustavohb/vulkan-qt-tutorial/blob/master/LICEN%C3%87A) para obter os direitos e limitações da licença (MIT)
