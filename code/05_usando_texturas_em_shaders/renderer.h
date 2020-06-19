@@ -16,6 +16,7 @@ struct Object3D
 
     VkImage textureImage = VK_NULL_HANDLE;
     VkDeviceMemory textureImageMemory = VK_NULL_HANDLE;
+    VkImageView textureImageView = VK_NULL_HANDLE;
 
     QSharedPointer<Model> model;
 };
@@ -49,6 +50,7 @@ private:
     void transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout);
     void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
     void initObject();
+    void createTextureImageView();
     void createObjectVertexBuffer();
     void releaseObjectResources();
 
