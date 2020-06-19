@@ -230,6 +230,39 @@ void Renderer::createDescriptorSetLayout() {
     }
 }
 
+void Renderer::createDescriptorPool() {
+    VkDescriptorPoolSize poolSize = {};
+    poolSize.type =  VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    poolSize.descriptorCount = 1;
+
+    VkDescriptorPoolCreateInfo poolInfo = {};
+    poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+    poolInfo.poolSizeCount = 1;
+    poolInfo.pPoolSizes = &poolSize;
+    poolInfo.maxSets = 1;
+
+    VkDevice device = m_window->device();
+
+    if (m_object->descriptorPool) {
+        m_deviceFunctions->vkDestroyDescriptorPool(
+            device,
+            m_object->descriptorPool,
+            nullptr
+        );
+        m_object->descriptorPool = VK_NULL_HANDLE;
+    }
+
+    VkResult result = m_deviceFunctions->vkCreateDescriptorPool(
+        device,
+        &poolInfo,
+        nullptr,
+        &m_object->descriptorPool
+    );
+    if (result != VK_SUCCESS) {
+        qFatal("Failed to create descriptor pool: %d", result);
+    }
+}
+
 VkCommandBuffer Renderer::beginSingleTimeCommands() {
     VkCommandBufferAllocateInfo allocInfo = {};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -520,6 +553,7 @@ void Renderer::addTextureImage(QString texturePath) {
     );
 
     createTextureImageView();
+    createDescriptorPool();
 }
 
 void Renderer::startNextFrame() {
@@ -770,6 +804,15 @@ void Renderer::releaseObjectResources() {
             nullptr
         );
         m_object->textureImageMemory = VK_NULL_HANDLE;
+    }
+
+    if (m_object->descriptorPool) {
+        m_deviceFunctions->vkDestroyDescriptorPool(
+            device,
+            m_object->descriptorPool,
+            nullptr
+        );
+        m_object->descriptorPool = VK_NULL_HANDLE;
     }
 }
 
