@@ -19,6 +19,7 @@ struct Object3D
     VkImageView textureImageView = VK_NULL_HANDLE;
 
     VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
+    VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
 
     QSharedPointer<Model> model;
 };
@@ -56,6 +57,7 @@ private:
     void createTextureSampler();
     void createDescriptorSetLayout();
     void createDescriptorPool();
+    void createDescriptorSets();
     void initObject();
     void createTextureImageView();
     void createObjectVertexBuffer();

@@ -263,6 +263,49 @@ void Renderer::createDescriptorPool() {
     }
 }
 
+void Renderer::createDescriptorSets() {
+    VkDescriptorSetAllocateInfo allocInfo = {};
+    allocInfo.sType =
+        VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    allocInfo.descriptorPool = m_object->descriptorPool;
+    allocInfo.descriptorSetCount = 1;
+    allocInfo.pSetLayouts = &m_descriptorSetLayout;
+
+    VkDevice device = m_window->device();
+    VkResult result = m_deviceFunctions->vkAllocateDescriptorSets(
+        device,
+        &allocInfo,
+        &m_object->descriptorSet
+    );
+    if (result != VK_SUCCESS) {
+        qFatal("Failed to allocate descriptor sets: %d", result);
+    }
+
+    VkDescriptorImageInfo descriptorImageInfo = {};
+    descriptorImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    descriptorImageInfo.imageView = m_object->textureImageView;
+    descriptorImageInfo.sampler = m_textureSampler;
+
+    VkWriteDescriptorSet descriptorWrite = {};
+    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    descriptorWrite.dstSet = m_object->descriptorSet;
+    descriptorWrite.dstBinding = 0;
+    descriptorWrite.dstArrayElement = 0;
+    descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    descriptorWrite.descriptorCount = 1;
+    descriptorWrite.pBufferInfo = nullptr;
+    descriptorWrite.pImageInfo = &descriptorImageInfo;
+    descriptorWrite.pTexelBufferView = nullptr;
+
+    m_deviceFunctions->vkUpdateDescriptorSets(
+        device,
+        1,
+        &descriptorWrite,
+        0,
+        nullptr
+    );
+}
+
 VkCommandBuffer Renderer::beginSingleTimeCommands() {
     VkCommandBufferAllocateInfo allocInfo = {};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -554,6 +597,7 @@ void Renderer::addTextureImage(QString texturePath) {
 
     createTextureImageView();
     createDescriptorPool();
+    createDescriptorSets();
 }
 
 void Renderer::startNextFrame() {
