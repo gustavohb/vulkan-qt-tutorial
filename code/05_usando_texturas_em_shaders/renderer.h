@@ -26,6 +26,7 @@ public:
     void initResources() override;
     void releaseResources() override;
     void startNextFrame() override;
+    void addTextureImage(QString texturePath);
 
 private:
     VulkanWindow *m_window = nullptr;

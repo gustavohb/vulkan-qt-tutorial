@@ -108,6 +108,8 @@ void Renderer::initObject() {
     m_object = new Object3D(model);
 
     createObjectVertexBuffer();
+
+    addTextureImage(":/textures/texture.png");
 }
 
 void Renderer::createObjectVertexBuffer() {
@@ -197,6 +199,17 @@ void Renderer::endSingleTimeCommands(VkCommandBuffer commandBuffer) {
     VkDevice device = m_window->device();
     VkCommandPool commandPool = m_window->graphicsCommandPool();
     m_deviceFunctions->vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
+}
+
+void Renderer::addTextureImage(QString texturePath) {
+    QImage image(texturePath);
+
+    if (image.isNull()) {
+        qFatal("Failed to load texture image!");
+    }
+
+    image = image.convertToFormat(QImage::Format_RGBA8888);
+    VkDeviceSize imageSize = image.sizeInBytes();
 }
 
 void Renderer::startNextFrame() {
