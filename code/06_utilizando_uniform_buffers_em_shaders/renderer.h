@@ -16,6 +16,9 @@ struct Object3D
     VkBuffer vertexBuffer = VK_NULL_HANDLE;
     VkDeviceMemory vertexBufferMemory = VK_NULL_HANDLE;
 
+    VkBuffer uniformBuffer = VK_NULL_HANDLE;
+    VkDeviceMemory uniformBufferMemory = VK_NULL_HANDLE;
+
     VkImage textureImage = VK_NULL_HANDLE;
     VkDeviceMemory textureImageMemory = VK_NULL_HANDLE;
     VkImageView textureImageView = VK_NULL_HANDLE;
@@ -66,6 +69,7 @@ private:
     void createDescriptorSets();
     void initObject();
     void createTextureImageView();
+    void createUniformBuffer();
     void createObjectVertexBuffer();
     void releaseObjectResources();
 

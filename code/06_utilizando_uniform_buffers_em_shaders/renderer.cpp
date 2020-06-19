@@ -111,6 +111,8 @@ void Renderer::initObject() {
 
     createObjectVertexBuffer();
 
+    createUniformBuffer();
+
     addTextureImage(":/textures/texture.png");
 }
 
@@ -152,6 +154,16 @@ void Renderer::createTextureImageView() {
     }
 }
 
+void Renderer::createUniformBuffer() {
+    VkDeviceSize uniformBufferSize = sizeof(UniformBufferObject);
+    createBuffer(
+        uniformBufferSize,
+        VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+        m_window->hostVisibleMemoryIndex(),
+        m_object->uniformBuffer,
+        m_object->uniformBufferMemory
+    );
+}
 
 void Renderer::createObjectVertexBuffer() {
     VkBuffer stagingBuffer;
@@ -825,6 +837,11 @@ void Renderer::releaseObjectResources() {
             nullptr
         );
         m_object->vertexBuffer = VK_NULL_HANDLE;
+    }
+
+    if (m_object->uniformBuffer) {
+        m_deviceFunctions->vkDestroyBuffer(device, m_object->uniformBuffer, nullptr);
+        m_object->uniformBuffer = VK_NULL_HANDLE;
     }
 
     if(m_object->vertexBufferMemory) {
