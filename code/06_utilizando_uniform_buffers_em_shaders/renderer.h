@@ -5,6 +5,8 @@
 #include <QVulkanDeviceFunctions>
 #include <QSharedPointer>
 
+class VulkanWindow;
+
 struct Model;
 
 struct Object3D
@@ -24,7 +26,11 @@ struct Object3D
     QSharedPointer<Model> model;
 };
 
-class VulkanWindow;
+struct UniformBufferObject {
+    QMatrix4x4 model;
+    QMatrix4x4 view;
+    QMatrix4x4 proj;
+};
 
 class Renderer : public QVulkanWindowRenderer {
 public:
