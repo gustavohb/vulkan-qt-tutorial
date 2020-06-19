@@ -44,6 +44,7 @@ private:
     void endSingleTimeCommands(VkCommandBuffer commandBuffer);
     void initObject();
     void createObjectVertexBuffer();
+    void releaseObjectResources();
 
     static QByteArray readFile(const QString &fileName);
     VkShaderModule createShaderModule(const QByteArray &code);

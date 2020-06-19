@@ -135,7 +135,18 @@ void Renderer::createObjectVertexBuffer() {
         m_object->vertexBufferMemory
     );
 
+    copyBuffer(stagingBuffer, m_object->vertexBuffer, bufferSize);
 
+    m_deviceFunctions->vkDestroyBuffer(
+        device,
+        stagingBuffer,
+        nullptr
+    );
+    m_deviceFunctions->vkFreeMemory(
+        device,
+        stagingBufferMemory,
+        nullptr
+    );
 }
 
 void Renderer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) {
@@ -368,6 +379,28 @@ VkShaderModule Renderer::createShaderModule(const QByteArray &code) {
         QDebug(QtFatalMsg) << QLatin1String("Failed to create shader module:") << result;
 
     return shaderModule;
+}
+
+void Renderer::releaseObjectResources() {
+    VkDevice device = m_window->device();
+
+    if (m_object->vertexBuffer) {
+        m_deviceFunctions->vkDestroyBuffer(
+            device,
+            m_object->vertexBuffer,
+            nullptr
+        );
+        m_object->vertexBuffer = VK_NULL_HANDLE;
+    }
+
+    if(m_object->vertexBufferMemory) {
+        m_deviceFunctions->vkFreeMemory(
+            device,
+            m_object->vertexBufferMemory,
+            nullptr
+        );
+        m_object->vertexBufferMemory = VK_NULL_HANDLE;
+    }
 }
 
 void Renderer::releaseResources() {
