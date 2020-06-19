@@ -139,7 +139,15 @@ void Renderer::createObjectVertexBuffer() {
 }
 
 void Renderer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) {
+    VkCommandBuffer commandBuffer = beginSingleTimeCommands();
 
+    VkBufferCopy copyRegion = {};
+    copyRegion.srcOffset = 0;
+    copyRegion.dstOffset = 0;
+    copyRegion.size = size;
+    m_deviceFunctions->vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
+
+    endSingleTimeCommands(commandBuffer);
 }
 
 VkCommandBuffer Renderer::beginSingleTimeCommands() {
@@ -161,6 +169,23 @@ VkCommandBuffer Renderer::beginSingleTimeCommands() {
     m_deviceFunctions->vkBeginCommandBuffer(commandBuffer, &beginInfo);
 
     return commandBuffer;
+}
+
+void Renderer::endSingleTimeCommands(VkCommandBuffer commandBuffer) {
+    m_deviceFunctions->vkEndCommandBuffer(commandBuffer);
+
+    VkSubmitInfo submitInfo = {};
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = &commandBuffer;
+
+    VkQueue graphicsQueue = m_window->graphicsQueue();
+    m_deviceFunctions->vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+    m_deviceFunctions->vkQueueWaitIdle(graphicsQueue);
+
+    VkDevice device = m_window->device();
+    VkCommandPool commandPool = m_window->graphicsCommandPool();
+    m_deviceFunctions->vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
 }
 
 void Renderer::startNextFrame() {
