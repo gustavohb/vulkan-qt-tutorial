@@ -6,6 +6,8 @@ Todo conteúdo deste repositório pode ser acessado em [https://gustavohb.github
 
 Os arquivos contendo todo código do programa estão organizados na pasta `code`. Cada subpasta deste diretório contém o código por capítulo.
 
+O código apresentado neste repositório é baseado no tutorial de Vulkan escrito por Alexander Overvoorde disponível em [https://vulkan-tutorial.com/](https://vulkan-tutorial.com/). Este tutorial, além de cobrir boa parte do que veremos, também trata do uso de *index buffer*, mapeamento MIP e *multisampling*, que não trataremos aqui. Por outro lado, cobriremos alguns tópicos que não são cobertos nele, como iluminação local e implementação de um *trackball* virtual. Além disso, trataremos de especifidades do Qt, como criação de janela, uso de suas classes auxiliares para criação e gerenciamento de recursos do Vulkan, e uso de seu sistema interno de eventos. Para aprender mais sobre Vulkan, recomendamos que o leitor também consulte o material escrito por Overvoorde.
+
 ---
 
 * [Introdução](https://gustavohb.github.io/vulkan-qt-tutorial-site/)
