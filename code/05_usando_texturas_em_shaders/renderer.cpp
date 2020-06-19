@@ -657,6 +657,17 @@ void Renderer::startNextFrame() {
         offsets
     );
 
+    m_deviceFunctions->vkCmdBindDescriptorSets(
+        commandBuffer,
+        VK_PIPELINE_BIND_POINT_GRAPHICS,
+        m_pipelineLayout,
+        0,
+        1,
+        &m_object->descriptorSet,
+        0,
+        nullptr
+    );
+
     m_deviceFunctions->vkCmdDraw(
         commandBuffer,
         static_cast<uint32_t>(m_object->model->vertices.size()),
