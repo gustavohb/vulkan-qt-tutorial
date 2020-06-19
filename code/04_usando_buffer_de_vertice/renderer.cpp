@@ -246,7 +246,23 @@ void Renderer::startNextFrame() {
         m_graphicsPipeline
     );
 
-    m_deviceFunctions->vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+    VkBuffer vertexBuffers[] = {m_object->vertexBuffer};
+    VkDeviceSize offsets[] = {0};
+    m_deviceFunctions->vkCmdBindVertexBuffers(
+        commandBuffer,
+        0,
+        1,
+        vertexBuffers,
+        offsets
+    );
+
+    m_deviceFunctions->vkCmdDraw(
+        commandBuffer,
+        static_cast<uint32_t>(m_object->model->vertices.size()),
+        1,
+        0,
+        0
+    );
     m_deviceFunctions->vkCmdEndRenderPass(commandBuffer);
 
     m_window->frameReady();
