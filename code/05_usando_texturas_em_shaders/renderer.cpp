@@ -236,6 +236,34 @@ void Renderer::addTextureImage(QString texturePath) {
     memcpy(data, image.constBits(), static_cast<size_t>(imageSize));
     m_deviceFunctions->vkUnmapMemory(device, stagingBufferMemory);
 
+    VkImageCreateInfo imageInfo = {};
+    imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageInfo.pNext = nullptr;
+    imageInfo.flags = 0;
+    imageInfo.imageType = VK_IMAGE_TYPE_2D;
+    imageInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+    imageInfo.extent.width = image.width();
+    imageInfo.extent.height = image.height();
+    imageInfo.extent.depth = 1;
+    imageInfo.mipLevels = 1;
+    imageInfo.arrayLayers = 1;
+    imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+    imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+    imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+    imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    imageInfo.queueFamilyIndexCount = 0;
+    imageInfo.pQueueFamilyIndices = nullptr;
+    imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+
+    if (m_object->textureImage) {
+       m_deviceFunctions->vkDestroyImage(device, m_object->textureImage, nullptr);
+        m_object->textureImage = VK_NULL_HANDLE;
+    }
+
+    VkResult result = m_deviceFunctions->vkCreateImage(device, &imageInfo, nullptr, &m_object->textureImage);
+    if (result != VK_SUCCESS) {
+       qFatal("Failed to create image: %d", result);
+    }
 }
 
 void Renderer::startNextFrame() {
