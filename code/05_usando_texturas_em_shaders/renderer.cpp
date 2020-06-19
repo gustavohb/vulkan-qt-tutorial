@@ -20,6 +20,7 @@ void Renderer::initResources() {
     m_deviceFunctions = m_window->vulkanInstance()->deviceFunctions(device);
 
     initPipeline();
+    createTextureSampler();
     initObject();
 }
 
@@ -323,6 +324,39 @@ void Renderer::copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width,
     );
 
     endSingleTimeCommands(commandBuffer);
+}
+
+void Renderer::createTextureSampler() {
+    VkSamplerCreateInfo samplerInfo = {};
+    samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    samplerInfo.pNext = nullptr;
+    samplerInfo.flags = 0;
+    samplerInfo.magFilter = VK_FILTER_LINEAR;
+    samplerInfo.minFilter = VK_FILTER_LINEAR;
+    samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+    samplerInfo.mipLodBias = 0.0f;
+    samplerInfo.minLod = 0.0f;
+    samplerInfo.maxLod = 0.0f;
+    samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    samplerInfo.anisotropyEnable = VK_FALSE;
+    samplerInfo.maxAnisotropy = 1.0;
+    samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+    samplerInfo.compareEnable = VK_FALSE;
+    samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+    samplerInfo.unnormalizedCoordinates = VK_FALSE;
+
+    VkDevice device = m_window->device();
+    VkResult result = m_deviceFunctions->vkCreateSampler(
+        device,
+        &samplerInfo,
+        nullptr,
+        &m_textureSampler
+    );
+    if (result != VK_SUCCESS) {
+        qFatal("Failed to create texture sampler: %d", result);
+    }
 }
 
 void Renderer::addTextureImage(QString texturePath) {
@@ -715,4 +749,10 @@ void Renderer::releaseResources() {
 
     m_deviceFunctions->vkDestroyPipeline(device, m_graphicsPipeline, nullptr);
     m_deviceFunctions->vkDestroyPipelineLayout(device, m_pipelineLayout, nullptr);
+
+    m_deviceFunctions->vkDestroySampler(
+            device,
+            m_textureSampler,
+            nullptr
+        );
 }

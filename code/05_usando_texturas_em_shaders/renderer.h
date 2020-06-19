@@ -37,6 +37,7 @@ private:
     QVulkanDeviceFunctions *m_deviceFunctions;
     VkPipelineLayout m_pipelineLayout = nullptr;
     VkPipeline m_graphicsPipeline = nullptr;
+    VkSampler m_textureSampler = nullptr;
 
     Object3D* m_object = nullptr;
 
@@ -49,6 +50,7 @@ private:
     void endSingleTimeCommands(VkCommandBuffer commandBuffer);
     void transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout);
     void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
+    void createTextureSampler();
     void initObject();
     void createTextureImageView();
     void createObjectVertexBuffer();
