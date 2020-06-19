@@ -8,6 +8,16 @@
 struct Vertex {
     QVector2D pos;
     QVector3D color;
+
+    static VkVertexInputBindingDescription getBindingDescription() {
+        VkVertexInputBindingDescription bindingDescription = {};
+
+        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+        bindingDescription.stride = sizeof(Vertex);
+        bindingDescription.binding = 0;
+
+        return bindingDescription;
+    }
 };
 
 struct Model
