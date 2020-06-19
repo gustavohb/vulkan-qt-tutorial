@@ -15,6 +15,7 @@ struct Object3D
     VkDeviceMemory vertexBufferMemory = VK_NULL_HANDLE;
 
     VkImage textureImage = VK_NULL_HANDLE;
+    VkDeviceMemory textureImageMemory = VK_NULL_HANDLE;
 
     QSharedPointer<Model> model;
 };

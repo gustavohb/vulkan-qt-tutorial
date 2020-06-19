@@ -264,6 +264,47 @@ void Renderer::addTextureImage(QString texturePath) {
     if (result != VK_SUCCESS) {
        qFatal("Failed to create image: %d", result);
     }
+
+    VkMemoryRequirements memRequirements;
+    m_deviceFunctions->vkGetImageMemoryRequirements(
+        device,
+        m_object->textureImage,
+        &memRequirements
+    );
+
+    VkMemoryAllocateInfo allocInfo = {};
+    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.allocationSize = memRequirements.size;
+    allocInfo.memoryTypeIndex = findMemoryType(
+        memRequirements.memoryTypeBits,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+    );
+
+    if (m_object->textureImageMemory != VK_NULL_HANDLE) {
+        m_deviceFunctions->vkFreeMemory(
+            device,
+            m_object->textureImageMemory,
+            nullptr
+        );
+        m_object->textureImageMemory = VK_NULL_HANDLE;
+    }
+
+    result = m_deviceFunctions->vkAllocateMemory(
+        device,
+        &allocInfo,
+        nullptr,
+        &m_object->textureImageMemory
+    );
+    if (result != VK_SUCCESS) {
+        qFatal("Failed to allocate image memory: %d", result);
+    }
+
+    m_deviceFunctions->vkBindImageMemory(
+        device,
+        m_object->textureImage,
+        m_object->textureImageMemory,
+        0
+    );
 }
 
 void Renderer::startNextFrame() {
