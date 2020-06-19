@@ -34,6 +34,8 @@ private:
 
 private:
     void initPipeline();
+    void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+    uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
     void initObject();
 
     static QByteArray readFile(const QString &fileName);

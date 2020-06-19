@@ -23,6 +23,66 @@ void Renderer::initResources() {
     initObject();
 }
 
+void Renderer::createBuffer(VkDeviceSize size,
+                            VkBufferUsageFlags usage,
+                            VkMemoryPropertyFlags properties,
+                            VkBuffer& buffer,
+                            VkDeviceMemory& bufferMemory) {
+
+    VkBufferCreateInfo bufferInfo = {};
+    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferInfo.size = size;
+    bufferInfo.usage = usage;
+    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    bufferInfo.queueFamilyIndexCount = 0;
+    bufferInfo.pQueueFamilyIndices = nullptr;
+
+    VkDevice device = m_window->device();
+    VkResult result = m_deviceFunctions->vkCreateBuffer(
+            device,
+            &bufferInfo,
+            nullptr,
+            &buffer
+        );
+    if (result != VK_SUCCESS) {
+        qFatal("Failed to create vertex buffer: %d", result);
+    }
+
+    VkMemoryRequirements memRequirements;
+    m_deviceFunctions->vkGetBufferMemoryRequirements(
+            device,
+            buffer,
+            &memRequirements
+        );
+
+
+
+}
+
+uint32_t Renderer::findMemoryType(
+        uint32_t typeFilter,
+        VkMemoryPropertyFlags properties) {
+
+    VkPhysicalDeviceMemoryProperties memProperties;
+    QVulkanInstance *inst = m_window->vulkanInstance();
+    QVulkanFunctions *f = inst->functions();
+
+    f->vkGetPhysicalDeviceMemoryProperties(
+            m_window->physicalDevice(),
+            &memProperties
+        );
+
+    for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
+         if ((typeFilter & (1 << i)) &&
+            (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
+            return i;
+        }
+    }
+
+    qFatal("Failed to find suitable memory type!");
+
+}
+
 void Renderer::initObject() {
     QSharedPointer<Model> model = QSharedPointer<Model>::create(Model());
     m_object = new Object3D(model);
