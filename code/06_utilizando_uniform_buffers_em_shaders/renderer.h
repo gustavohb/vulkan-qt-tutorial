@@ -70,6 +70,7 @@ private:
     void initObject();
     void createTextureImageView();
     void createUniformBuffer();
+    void updateUniformBuffer();
     void createObjectVertexBuffer();
     void releaseObjectResources();
 

@@ -1,6 +1,7 @@
 #include "renderer.h"
 
 #include <QFile>
+#include <QTime>
 #include <QVulkanFunctions>
 #include <array>
 
@@ -680,6 +681,8 @@ void Renderer::startNextFrame() {
         nullptr
     );
 
+    updateUniformBuffer();
+
     m_deviceFunctions->vkCmdDraw(
         commandBuffer,
         static_cast<uint32_t>(m_object->model->vertices.size()),
@@ -687,11 +690,46 @@ void Renderer::startNextFrame() {
         0,
         0
     );
+
     m_deviceFunctions->vkCmdEndRenderPass(commandBuffer);
 
     m_window->frameReady();
     m_window->requestUpdate();
 }
+
+void Renderer::updateUniformBuffer()
+{
+    static QTime startTime(QTime::currentTime());
+
+    float time = static_cast<float>(startTime.elapsed())/1000.0f;
+
+    UniformBufferObject ubo = {};
+    ubo.model.setToIdentity();
+    ubo.model.rotate(time * 90.0, QVector3D(0.0f, 0.0f, 1.0));
+
+    QVector3D eye = QVector3D(1.0, 1.0, 1.0);
+    QVector3D center = QVector3D(0.0, 0.0, 0.0);
+    QVector3D up = QVector3D(0.0, 0.0, 1.0);
+
+    ubo.view.setToIdentity();
+    ubo.view.lookAt(eye, center, up);
+
+    QSize swapChainImageSize = m_window->swapChainImageSize();
+    float aspectRatio = static_cast<float>(swapChainImageSize.width()) / static_cast<float>(swapChainImageSize.height());
+    ubo.proj = m_window->clipCorrectionMatrix();
+    ubo.proj.perspective(45.0f, aspectRatio, 0.01f, 100.0f);
+
+    quint8 *data;
+    VkDevice device = m_window->device();
+    m_deviceFunctions->vkMapMemory(device, m_object->uniformBufferMemory, 0, sizeof(UniformBufferObject), 0, reinterpret_cast<void **>(&data));
+
+    memcpy(data, ubo.model.constData(), 64);
+    memcpy(data + 64, ubo.view.constData(), 64);
+    memcpy(data + 128, ubo.proj.constData(), 64);
+
+    m_deviceFunctions->vkUnmapMemory(device, m_object->uniformBufferMemory);
+}
+
 
 void Renderer::initPipeline() {
     VkDevice device = m_window->device();
