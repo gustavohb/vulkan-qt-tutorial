@@ -111,6 +111,34 @@ void Renderer::initObject() {
 }
 
 void Renderer::createObjectVertexBuffer() {
+    VkBuffer stagingBuffer;
+    VkDeviceMemory stagingBufferMemory;
+    VkDeviceSize bufferSize = sizeof(m_object->model->vertices[0]) * m_object->model->vertices.size();
+
+    createBuffer(bufferSize,
+        VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        stagingBuffer,
+        stagingBufferMemory);
+
+    void* data;
+    VkDevice device = m_window->device();
+    m_deviceFunctions->vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
+    memcpy(data, m_object->model->vertices.data(), (size_t) bufferSize);
+    m_deviceFunctions->vkUnmapMemory(device, stagingBufferMemory);
+
+    createBuffer(
+        bufferSize,
+        VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        m_object->vertexBuffer,
+        m_object->vertexBufferMemory
+    );
+
+
+}
+
+void Renderer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) {
 
 }
 

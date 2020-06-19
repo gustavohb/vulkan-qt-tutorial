@@ -11,6 +11,9 @@ struct Object3D
 {
     Object3D(QSharedPointer<Model> model);
 
+    VkBuffer vertexBuffer = VK_NULL_HANDLE;
+    VkDeviceMemory vertexBufferMemory = VK_NULL_HANDLE;
+
     QSharedPointer<Model> model;
 };
 
@@ -36,6 +39,8 @@ private:
     void initPipeline();
     void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
     uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+    void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+    VkCommandBuffer beginSingleTimeCommands();
     void initObject();
     void createObjectVertexBuffer();
 
