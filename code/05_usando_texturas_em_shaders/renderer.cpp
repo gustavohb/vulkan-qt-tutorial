@@ -390,6 +390,34 @@ void Renderer::addTextureImage(QString texturePath) {
         m_object->textureImageMemory,
         0
     );
+
+    transitionImageLayout(
+        m_object->textureImage,
+        VK_IMAGE_LAYOUT_UNDEFINED,
+        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+    );
+
+    copyBufferToImage(
+        stagingBuffer, m_object->textureImage,
+        static_cast<uint32_t>(image.width()),
+        static_cast<uint32_t>(image.height())
+    );
+
+    transitionImageLayout(
+        m_object->textureImage,
+        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+    );
+
+    m_deviceFunctions->vkDestroyBuffer(
+        device, stagingBuffer,
+        nullptr
+    );
+    m_deviceFunctions->vkFreeMemory(
+        device,
+        stagingBufferMemory,
+        nullptr
+    );
 }
 
 void Renderer::startNextFrame() {
@@ -613,6 +641,23 @@ void Renderer::releaseObjectResources() {
             nullptr
         );
         m_object->vertexBufferMemory = VK_NULL_HANDLE;
+    }
+
+    if (m_object->textureImage) {
+        m_deviceFunctions->vkDestroyImage(
+            device, m_object->textureImage,
+            nullptr
+        );
+        m_object->textureImage = VK_NULL_HANDLE;
+    }
+
+    if (m_object->textureImageMemory) {
+        m_deviceFunctions->vkFreeMemory(
+            device,
+            m_object->textureImageMemory,
+            nullptr
+        );
+        m_object->textureImageMemory = VK_NULL_HANDLE;
     }
 }
 
