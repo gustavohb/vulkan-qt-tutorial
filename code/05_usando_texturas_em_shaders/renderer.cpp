@@ -19,6 +19,7 @@ void Renderer::initResources() {
     VkDevice device = m_window->device();
     m_deviceFunctions = m_window->vulkanInstance()->deviceFunctions(device);
 
+    createDescriptorSetLayout();
     initPipeline();
     createTextureSampler();
     initObject();
@@ -201,6 +202,32 @@ void Renderer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize s
     m_deviceFunctions->vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
 
     endSingleTimeCommands(commandBuffer);
+}
+
+void Renderer::createDescriptorSetLayout() {
+    VkDescriptorSetLayoutBinding samplerLayoutBinding = {};
+    samplerLayoutBinding.binding = 0;
+    samplerLayoutBinding.descriptorType =
+        VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    samplerLayoutBinding.descriptorCount = 1;
+    samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+    samplerLayoutBinding.pImmutableSamplers = nullptr;
+
+    VkDescriptorSetLayoutCreateInfo layoutInfo = {};
+    layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    layoutInfo.bindingCount = 1;
+    layoutInfo.pBindings = &samplerLayoutBinding;
+
+    VkDevice device = m_window->device();
+    VkResult result = m_deviceFunctions->vkCreateDescriptorSetLayout(
+        device,
+        &layoutInfo,
+        nullptr,
+        &m_descriptorSetLayout
+    );
+    if (result != VK_SUCCESS) {
+        qFatal("Failed to create descriptor set layout: %d", result);
+    }
 }
 
 VkCommandBuffer Renderer::beginSingleTimeCommands() {
@@ -638,6 +665,8 @@ void Renderer::initPipeline() {
 
     VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    pipelineLayoutInfo.setLayoutCount = 1;
+    pipelineLayoutInfo.pSetLayouts = &m_descriptorSetLayout;
 
     VkResult result = m_deviceFunctions->vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &m_pipelineLayout);
     if (result != VK_SUCCESS)
@@ -753,6 +782,12 @@ void Renderer::releaseResources() {
     m_deviceFunctions->vkDestroySampler(
             device,
             m_textureSampler,
+            nullptr
+        );
+
+    m_deviceFunctions->vkDestroyDescriptorSetLayout(
+            device,
+            m_descriptorSetLayout,
             nullptr
         );
 }
