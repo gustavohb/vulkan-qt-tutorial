@@ -210,6 +210,32 @@ void Renderer::addTextureImage(QString texturePath) {
 
     image = image.convertToFormat(QImage::Format_RGBA8888);
     VkDeviceSize imageSize = image.sizeInBytes();
+
+    VkBuffer stagingBuffer;
+    VkDeviceMemory stagingBufferMemory;
+
+    createBuffer(
+        imageSize,
+        VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+            | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        stagingBuffer,
+        stagingBufferMemory
+    );
+
+    void *data;
+    VkDevice device = m_window->device();
+    m_deviceFunctions->vkMapMemory(
+        device,
+        stagingBufferMemory,
+        0,
+        imageSize,
+        0,
+        &data
+    );
+    memcpy(data, image.constBits(), static_cast<size_t>(imageSize));
+    m_deviceFunctions->vkUnmapMemory(device, stagingBufferMemory);
+
 }
 
 void Renderer::startNextFrame() {
