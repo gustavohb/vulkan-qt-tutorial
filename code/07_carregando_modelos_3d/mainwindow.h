@@ -19,6 +19,7 @@ public:
 
 public slots:
     void loadModel();
+    void loadTexture();
 
 private:
     Ui::MainWindow *ui;

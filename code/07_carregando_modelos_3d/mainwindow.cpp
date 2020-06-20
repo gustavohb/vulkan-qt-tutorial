@@ -21,6 +21,15 @@ MainWindow::MainWindow(QWidget *parent) :
         this,
         SLOT(loadModel())
     );
+
+    connect(
+        ui->loadTextureButton,
+        SIGNAL(clicked()),
+        this,
+        SLOT(loadTexture())
+    );
+
+    ui->loadTextureButton->setEnabled(false);
 }
 
 MainWindow::~MainWindow() {
@@ -41,5 +50,20 @@ void MainWindow::loadModel() {
             QSharedPointer<Model>::create();
         model->readOBJFile(fileName);
         m_vulkanWindow->renderer()->addObject(model);
+
+        ui->loadTextureButton->setEnabled(true);
+    }
+}
+
+void MainWindow::loadTexture() {
+    const QString fileName =QFileDialog::getOpenFileName(
+        this,
+        tr("Open Image"),
+        QDir::homePath(),
+        tr("Image Files (*.png *.jpg *.bmp)")
+    );
+
+    if (!fileName.isEmpty()) {
+        m_vulkanWindow->renderer()->addTextureImage(fileName);
     }
 }

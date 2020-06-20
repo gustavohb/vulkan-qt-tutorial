@@ -3,5 +3,6 @@
         <file>shaders/shader.vert.spv</file>
         <file>shaders/shader.frag.spv</file>
         <file>textures/texture.png</file>
+        <file>textures/default.png</file>
     </qresource>
 </RCC>

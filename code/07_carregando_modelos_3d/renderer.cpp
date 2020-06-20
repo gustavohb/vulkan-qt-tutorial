@@ -9,6 +9,9 @@
 
 #include "model.h"
 
+static const QString DEFAULT_TEXTURE_PATH =
+    ":/textures/default.png";
+
 Object3D::Object3D(QSharedPointer<Model> model)
     : model(model) {}
 
@@ -110,7 +113,7 @@ void Renderer::initObject() {
 
     createUniformBuffer();
 
-    addTextureImage(":/textures/texture.png");
+    addTextureImage(DEFAULT_TEXTURE_PATH);
 }
 
 void Renderer::drawObject()
