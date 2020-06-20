@@ -7,7 +7,7 @@
 #include <array>
 
 struct Vertex {
-    QVector2D pos;
+    QVector3D pos;
     QVector3D color;
     QVector2D texCoord;
 
@@ -26,7 +26,7 @@ struct Vertex {
 
         attributeDescriptions[0].binding = 0;
         attributeDescriptions[0].location = 0;
-        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
+        attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
         attributeDescriptions[0].offset = offsetof(Vertex, pos);
 
         attributeDescriptions[1].binding = 0;
@@ -47,14 +47,9 @@ struct Model
 {
     Model() {};
 
-    QVector<Vertex> vertices = {
-        { {-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f} },
-        { { 0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f} },
-        { { 0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f} },
-        { { 0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f} },
-        { {-0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f} },
-        { {-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f} }
-    };
+    bool isValid() const { return vertices.size(); }
+
+    QVector<Vertex> vertices;
 };
 
 #endif // MODEL_H

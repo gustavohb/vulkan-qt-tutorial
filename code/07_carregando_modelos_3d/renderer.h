@@ -43,6 +43,7 @@ public:
     void releaseResources() override;
     void startNextFrame() override;
     void addTextureImage(QString texturePath);
+    void ddObject(QSharedPointer<Model> model);
 
 private:
     VulkanWindow *m_window = nullptr;
@@ -68,11 +69,13 @@ private:
     void createDescriptorPool();
     void createDescriptorSets();
     void initObject();
+    void drawObject();
     void createTextureImageView();
     void createUniformBuffer();
     void updateUniformBuffer();
     void createObjectVertexBuffer();
     void releaseObjectResources();
+
 
     static QByteArray readFile(const QString &fileName);
     VkShaderModule createShaderModule(const QByteArray &code);

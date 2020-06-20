@@ -23,7 +23,6 @@ void Renderer::initResources() {
     createDescriptorSetLayout();
     initPipeline();
     createTextureSampler();
-    initObject();
 }
 
 void Renderer::createBuffer(VkDeviceSize size,
@@ -115,6 +114,56 @@ void Renderer::initObject() {
     createUniformBuffer();
 
     addTextureImage(":/textures/texture.png");
+}
+
+void Renderer::drawObject()
+{
+    if (!m_object) {
+        return;
+    }
+
+    if (m_object->vertexBuffer == VK_NULL_HANDLE) {
+        initObject();
+    }
+
+    updateUniformBuffer();
+
+    VkCommandBuffer commandBuffer = m_window->currentCommandBuffer();
+
+    m_deviceFunctions->vkCmdBindPipeline(
+        commandBuffer,
+        VK_PIPELINE_BIND_POINT_GRAPHICS,
+        m_graphicsPipeline
+    );
+
+    m_deviceFunctions->vkCmdBindDescriptorSets(
+        commandBuffer,
+        VK_PIPELINE_BIND_POINT_GRAPHICS,
+        m_pipelineLayout,
+        0,
+        1,
+        &m_object->descriptorSet,
+        0,
+        nullptr
+    );
+
+    VkBuffer vertexBuffers[] = {m_object->vertexBuffer};
+    VkDeviceSize offsets[] = {0};
+    m_deviceFunctions->vkCmdBindVertexBuffers(
+        commandBuffer,
+        0,
+        1,
+        vertexBuffers,
+        offsets
+    );
+
+    m_deviceFunctions->vkCmdDraw(
+        commandBuffer,
+        static_cast<uint32_t>(m_object->model->vertices.size()),
+        1,
+        0,
+        0
+    );
 }
 
 void Renderer::createTextureImageView() {
@@ -639,6 +688,17 @@ void Renderer::addTextureImage(QString texturePath) {
     createDescriptorSets();
 }
 
+void Renderer::addObject(QSharedPointer<Model> model) {
+    if (model->isValid()) {
+        if (m_object)
+            releaseObjectResources();
+
+        m_object = new Object3D(model);
+
+        m_window->requestUpdate();
+    }
+}
+
 void Renderer::startNextFrame() {
     VkRenderPassBeginInfo renderPassInfo = {};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -680,42 +740,7 @@ void Renderer::startNextFrame() {
         &scissor
     );
 
-    m_deviceFunctions->vkCmdBindPipeline(
-        commandBuffer,
-        VK_PIPELINE_BIND_POINT_GRAPHICS,
-        m_graphicsPipeline
-    );
-
-    VkBuffer vertexBuffers[] = {m_object->vertexBuffer};
-    VkDeviceSize offsets[] = {0};
-    m_deviceFunctions->vkCmdBindVertexBuffers(
-        commandBuffer,
-        0,
-        1,
-        vertexBuffers,
-        offsets
-    );
-
-    m_deviceFunctions->vkCmdBindDescriptorSets(
-        commandBuffer,
-        VK_PIPELINE_BIND_POINT_GRAPHICS,
-        m_pipelineLayout,
-        0,
-        1,
-        &m_object->descriptorSet,
-        0,
-        nullptr
-    );
-
-    updateUniformBuffer();
-
-    m_deviceFunctions->vkCmdDraw(
-        commandBuffer,
-        static_cast<uint32_t>(m_object->model->vertices.size()),
-        1,
-        0,
-        0
-    );
+    drawObject();
 
     m_deviceFunctions->vkCmdEndRenderPass(commandBuffer);
 
