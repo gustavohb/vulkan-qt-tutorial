@@ -757,6 +757,7 @@ void Renderer::updateUniformBuffer()
     UniformBufferObject ubo = {};
     ubo.model.setToIdentity();
     ubo.model.rotate(time * 90.0, QVector3D(0.0f, 0.0f, 1.0));
+    ubo.model *= m_object->model->transformation;
 
     QVector3D eye = QVector3D(1.0, 1.0, 1.0);
     QVector3D center = QVector3D(0.0, 0.0, 0.0);

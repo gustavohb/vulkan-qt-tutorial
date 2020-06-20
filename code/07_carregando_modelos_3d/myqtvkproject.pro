@@ -28,7 +28,8 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     vulkanwindow.cpp \
-    renderer.cpp
+    renderer.cpp \
+    model.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -55,3 +56,5 @@ for (shader, Shaders) {
 
 RESOURCES += \
     resources.qrc
+
+INCLUDEPATH += $${_PRO_FILE_PWD_}/vendor

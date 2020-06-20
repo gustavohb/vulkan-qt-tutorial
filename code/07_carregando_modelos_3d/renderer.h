@@ -43,7 +43,7 @@ public:
     void releaseResources() override;
     void startNextFrame() override;
     void addTextureImage(QString texturePath);
-    void ddObject(QSharedPointer<Model> model);
+    void addObject(QSharedPointer<Model> model);
 
 private:
     VulkanWindow *m_window = nullptr;

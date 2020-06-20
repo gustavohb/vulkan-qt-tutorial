@@ -5,6 +5,8 @@
 #include <QVector3D>
 #include <QVector>
 #include <array>
+#include <QMatrix4x4>
+#include <QVulkanFunctions>
 
 struct Vertex {
     QVector3D pos;
@@ -49,7 +51,10 @@ struct Model
 
     bool isValid() const { return vertices.size(); }
 
+    void readOBJFile(QString const &filePath);
+
     QVector<Vertex> vertices;
+    QMatrix4x4 transformation;
 };
 
 #endif // MODEL_H
