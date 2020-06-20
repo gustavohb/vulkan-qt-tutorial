@@ -861,6 +861,19 @@ void Renderer::initPipeline() {
     if (result != VK_SUCCESS)
         qFatal("Failed to create pipeline layout: %d", result);
 
+    VkPipelineDepthStencilStateCreateInfo depthStencil = {};
+    depthStencil.sType =
+        VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    depthStencil.depthTestEnable = VK_TRUE;
+    depthStencil.depthWriteEnable = VK_TRUE;
+    depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
+    depthStencil.depthBoundsTestEnable = VK_FALSE;
+    depthStencil.minDepthBounds = 0.0f;
+    depthStencil.maxDepthBounds = 1.0f;
+    depthStencil.stencilTestEnable = VK_FALSE;
+    depthStencil.front = {};
+    depthStencil.back = {};
+
     VkGraphicsPipelineCreateInfo pipelineInfo = {};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     pipelineInfo.stageCount = 2;
@@ -873,6 +886,7 @@ void Renderer::initPipeline() {
     pipelineInfo.layout = m_pipelineLayout;
     pipelineInfo.renderPass = m_window->defaultRenderPass();
     pipelineInfo.subpass = 0;
+    pipelineInfo.pDepthStencilState = &depthStencil;
 
     result = m_deviceFunctions->vkCreateGraphicsPipelines(
             device,
