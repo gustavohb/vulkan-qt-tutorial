@@ -106,9 +106,6 @@ uint32_t Renderer::findMemoryType(
 }
 
 void Renderer::initObject() {
-    //QSharedPointer<Model> model = QSharedPointer<Model>::create(Model());
-    //m_object = new Object3D(model);
-
     createObjectVertexBuffer();
 
     createUniformBuffer();
@@ -757,12 +754,12 @@ void Renderer::updateUniformBuffer()
 
     UniformBufferObject ubo = {};
     ubo.model.setToIdentity();
-    ubo.model.rotate(time * 90.0, QVector3D(0.0f, 0.0f, 1.0));
+    ubo.model.rotate(time * 90.0, QVector3D(0.0f, 1.0f, 0.0));
     ubo.model *= m_object->model->transformation;
 
     QVector3D eye = QVector3D(1.0, 1.0, 1.0);
     QVector3D center = QVector3D(0.0, 0.0, 0.0);
-    QVector3D up = QVector3D(0.0, 0.0, 1.0);
+    QVector3D up = QVector3D(0.0, 1.0, 0.0);
 
     ubo.view.setToIdentity();
     ubo.view.lookAt(eye, center, up);
