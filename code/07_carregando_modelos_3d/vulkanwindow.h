@@ -3,7 +3,7 @@
 
 #include <QVulkanWindow>
 
-class Renderer;
+#include "renderer.h"
 
 class VulkanWindow : public QVulkanWindow {
     Q_OBJECT
@@ -11,6 +11,10 @@ class VulkanWindow : public QVulkanWindow {
 public:
     VulkanWindow(QWindow *parentWindow = nullptr);
     QVulkanWindowRenderer *createRenderer() override;
+
+    Renderer *renderer() {
+        return m_renderer;
+    }
 
 private:
     QVulkanInstance m_instance;

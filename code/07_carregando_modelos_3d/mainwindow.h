@@ -17,6 +17,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void loadModel();
+
 private:
     Ui::MainWindow *ui;
     VulkanWindow *m_vulkanWindow;

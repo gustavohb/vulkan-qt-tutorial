@@ -106,8 +106,8 @@ uint32_t Renderer::findMemoryType(
 }
 
 void Renderer::initObject() {
-    QSharedPointer<Model> model = QSharedPointer<Model>::create(Model());
-    m_object = new Object3D(model);
+    //QSharedPointer<Model> model = QSharedPointer<Model>::create(Model());
+    //m_object = new Object3D(model);
 
     createObjectVertexBuffer();
 
@@ -164,6 +164,7 @@ void Renderer::drawObject()
         0,
         0
     );
+
 }
 
 void Renderer::createTextureImageView() {
