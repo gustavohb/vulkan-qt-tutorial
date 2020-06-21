@@ -2,6 +2,10 @@
 
 Neste repositório, fornecemos um guia introdutório para o desenvolvimento de aplicativos gráficos interativos usando Vulkan e Qt.
 
+<p align="center">
+  <img width="536" height="480" src="https://user-images.githubusercontent.com/3193712/85233784-644bf580-b3df-11ea-9b64-c451106dac10.gif">
+</p>
+
 Todo conteúdo deste repositório pode ser acessado em [https://gustavohb.github.io/vulkan-qt-tutorial-site/](https://gustavohb.github.io/vulkan-qt-tutorial-site/).
 
 Os arquivos contendo todo código do programa estão organizados na pasta `code`. Cada subpasta deste diretório contém o código por capítulo.
