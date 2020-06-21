@@ -29,13 +29,15 @@ SOURCES += \
         mainwindow.cpp \
     vulkanwindow.cpp \
     renderer.cpp \
-    model.cpp
+    model.cpp \
+    trackball.cpp
 
 HEADERS += \
         mainwindow.h \
     vulkanwindow.h \
     renderer.h \
-    model.h
+    model.h \
+    trackball.h
 
 FORMS += \
         mainwindow.ui
