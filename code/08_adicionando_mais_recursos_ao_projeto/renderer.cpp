@@ -772,6 +772,12 @@ void Renderer::updateUniformBuffer()
     ubo.proj = m_window->clipCorrectionMatrix();
     ubo.proj.perspective(45.0f, aspectRatio, 0.01f, 100.0f);
 
+    float ecLightPosition[] = {
+        m_lightPosition.x(),
+        m_lightPosition.y(),
+        m_lightPosition.z()
+    };
+
     quint8 *data;
     VkDevice device = m_window->device();
     m_deviceFunctions->vkMapMemory(device, m_object->uniformBufferMemory, 0, sizeof(UniformBufferObject), 0, reinterpret_cast<void **>(&data));
@@ -779,6 +785,7 @@ void Renderer::updateUniformBuffer()
     memcpy(data, ubo.model.constData(), 64);
     memcpy(data + 64, ubo.view.constData(), 64);
     memcpy(data + 128, ubo.proj.constData(), 64);
+    memcpy(data + 192, ecLightPosition, 3 * sizeof(float));
 
     m_deviceFunctions->vkUnmapMemory(device, m_object->uniformBufferMemory);
 }

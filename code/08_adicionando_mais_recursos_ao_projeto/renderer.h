@@ -33,6 +33,7 @@ struct UniformBufferObject {
     QMatrix4x4 model;
     QMatrix4x4 view;
     QMatrix4x4 proj;
+    QVector3D lighPosition;
 };
 
 class Renderer : public QVulkanWindowRenderer {
@@ -52,6 +53,7 @@ private:
     VkPipelineLayout m_pipelineLayout = nullptr;
     VkPipeline m_graphicsPipeline = nullptr;
     VkSampler m_textureSampler = nullptr;
+    QVector3D m_lightPosition = QVector3D(0.0, 1.0, 1.0);
 
     Object3D* m_object = nullptr;
 
