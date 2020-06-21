@@ -1,6 +1,5 @@
 #include "trackball.h"
 
-#include <cmath>
 #include <qmath.h>
 
 Trackball::Trackball()
