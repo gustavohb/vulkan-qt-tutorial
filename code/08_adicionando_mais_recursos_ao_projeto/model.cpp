@@ -86,7 +86,17 @@ void Model::readOBJFile(QString const &filePath) {
                 maxDimension.setZ(vertex.pos.z());
             }
 
+            indexTemp = index.normal_index * 3;
 
+            if (index.normal_index > -1) {
+                vertex.normal = {
+                    attribs.normals[indexTemp + 0],
+                    attribs.normals[indexTemp + 1],
+                    attribs.normals[indexTemp + 2]
+                };
+            } else {
+                vertex.normal = {0.0f, 0.0f, 0.0f};
+            }
 
             vertices.push_back(vertex);
         }
